@@ -20,33 +20,53 @@ app.get("/api/genres", (req, res) => {
 });
 
 // Get specific genre
-
-app.get("/api/genre/:id", (req, res) => {
-  res.send(genres[req.params.id]);
+app.get("/api/genres/:id", (req, res) => {
+  const genre = genres.find((g) => g.id === parseInt(req.params.id));
+  if (!genre) return res.status(404).send("Genre not found.");
+  res.send(genre);
 });
 
 // Add new genre
-
-app.post("/api/genre", (req, res) => {
-  genres.push({
-    id: req.body.id,
+app.post("/api/genres", (req, res) => {
+  const { error } = genreValidate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+  const genre = {
+    id: genres.length + 1,
     name: req.body.name,
-  });
-  res.send(genres);
+  };
+  genres.push(genre);
+  res.send(genre);
 });
 
 // Update genre
-app.put("/api/genre/:id", (req, res) => {
-  genres.splice(req.params.id, 1);
-  res.send(genres);
+app.put("/api/genres/:id", (req, res) => {
+  const genre = genres.find((g) => g.id === parseInt(req.params.id));
+  if (!genre) return res.status(404).send("Genre not found.");
+  const { error } = genreValidate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+  genre.name = req.body.name;
+  res.send(genre);
 });
 
 // Delete genre
 app.delete("/api/genres/:id", (req, res) => {
-  genres.splice(req.params.id, 1);
+  const genre = genres.find((g) => g.id === parseInt(req.params.id));
+  if (!genre) return res.status(404).send("Genre not found.");
+  const { error } = genreValidate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+  const index = genres.indexOf(genre);
+  genres.splice(index, 1);
+  res.send(genre);
 });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Listening on port: ${port}...`);
 });
+
+const genreValidate = (genre) => {
+  const schema = {
+    name: Joi.string().min(3).required(),
+  };
+  return Joi.validate(genre, schema);
+};
