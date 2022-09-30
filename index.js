@@ -1,3 +1,4 @@
+const config = require("config");
 const Joi = require("joi");
 const helmet = require("helmet");
 const morgan = require("morgan");
@@ -17,6 +18,10 @@ if (app.get("env") === "development") {
 // Self made middleware
 app.use(logger);
 app.use(authenticator);
+
+// Configuration
+console.log(`Application Name: ${config.get("name")}`);
+console.log(`Mail Server: ${config.get("mail.host")}`);
 
 const genres = [
   { id: 1, name: "genre 1" },
