@@ -22,6 +22,7 @@ app.use(authenticator);
 // Configuration
 console.log(`Application Name: ${config.get("name")}`);
 console.log(`Mail Server: ${config.get("mail.host")}`);
+console.log(`Mail Password: ${config.get("mail.password")}`);
 
 const genres = [
   { id: 1, name: "genre 1" },
