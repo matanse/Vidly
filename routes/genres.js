@@ -2,6 +2,24 @@ const Joi = require("joi");
 const router = require("express").Router();
 const debug = require("debug");
 const netDebug = debug("app:net");
+const mongoose = require("mongoose");
+
+// Connect to Mongodb server
+mongoose
+  .connect("mongodb://localhost/vidly")
+  .then(() => {
+    console.log("connect to MongoDB vidly...");
+  })
+  .catch((err) => {
+    console.log("Error: ", err);
+  });
+
+const genreSchema = new mongoose.Schema({
+  _id: String,
+  name: { type: String, minLength: 2, maxLength: 30, required: true },
+});
+
+const Genre = mongoose.model("Genre", genreSchema);
 
 const genres = [
   { id: 1, name: "genre 1" },
