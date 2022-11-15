@@ -1,5 +1,5 @@
 {
-  "name": "My express app - Production",
+  "name": "Vidly - Production",
   "mail": {
     "host": "prod-mail-server"
   }
