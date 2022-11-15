@@ -17,16 +17,18 @@ if (app.get("env") === "development") {
   startupDebug("Morgan is enabled...");
 }
 
-// Self made middleware
+// routes
 app.use("/api/genres", genres);
 app.use("/", home);
 
-// Configuration;
+// Self made middleware
+app.use(logger);
+
+// Configuration
 startupDebug(`Application Name: ${config.get("name")}`);
 startupDebug(`Mail Server: ${config.get("mail.host")}`);
-startupDebug(`Mail Password: ${config.get("mail.password")}`);
-
-app.use(logger);
+// startupDebug(`Mail Password: ${config.get("mail.password")}`);
+// console.log(config.get("mail"));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
