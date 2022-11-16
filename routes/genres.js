@@ -21,15 +21,13 @@ const genreSchema = new mongoose.Schema({
 
 const Genre = mongoose.model("Genre", genreSchema);
 
-const genres = [
-  { id: 1, name: "genre 1" },
-  { id: 2, name: "genre 2" },
-  { id: 3, name: "genre 3" },
-];
+const getGenres = async () => {
+  return await Genre.find();
+};
 
 // Get all genres
-router.get("/", (req, res) => {
-  netDebug("Call for genres");
+router.get("/", async (req, res) => {
+  const genres = await getGenres();
   res.send(genres);
 });
 
