@@ -1,7 +1,8 @@
 const Joi = require("joi");
 const router = require("express").Router();
 const debug = require("debug");
-const netDebug = debug("app:net");
+const netRequest = debug("app:net:request");
+const netReply = debug("app:net:reply");
 const mongoose = require("mongoose");
 
 // Connect to Mongodb server
@@ -27,13 +28,15 @@ const getGenres = async () => {
 
 // Get all genres
 router.get("/", async (req, res) => {
+  netRequest("Call for genres");
   const genres = await getGenres();
+  netReply(genres);
   res.send(genres);
 });
 
 // Get specific genre
 router.get("/:id", (req, res) => {
-  netDebug("Call for specific genre");
+  netRequest("Call for specific genre");
   const genre = genres.find((g) => g.id === parseInt(req.params.id));
   if (!genre) return res.status(404).send("Genre not found.");
   res.send(genre);
@@ -41,7 +44,7 @@ router.get("/:id", (req, res) => {
 
 // Add new genre
 router.post("/", (req, res) => {
-  netDebug("Call to create a new genre");
+  netRequest("Call to create a new genre");
   const { error } = genreValidate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   const genre = {
@@ -54,7 +57,7 @@ router.post("/", (req, res) => {
 
 // Update genre
 router.put("/:id", (req, res) => {
-  netDebug("Call to update genre");
+  netRequest("Call to update genre");
   const genre = genres.find((g) => g.id === parseInt(req.params.id));
   if (!genre) return res.status(404).send("Genre not found.");
   const { error } = genreValidate(req.body);
@@ -65,7 +68,7 @@ router.put("/:id", (req, res) => {
 
 // Delete genre
 router.delete("/:id", (req, res) => {
-  netDebug("Call to delete genre");
+  netRequest("Call to delete genre");
   const genre = genres.find((g) => g.id === parseInt(req.params.id));
   if (!genre) return res.status(404).send("Genre not found.");
   const index = genres.indexOf(genre);
