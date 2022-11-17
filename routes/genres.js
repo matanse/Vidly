@@ -35,9 +35,9 @@ router.get("/", async (req, res) => {
 });
 
 // Get specific genre
-router.get("/:id", (req, res) => {
-  netRequest("Call for specific genre");
-  const genre = Genre.findById(req.params.id);
+router.get("/:id", async (req, res) => {
+  netRequest("Call for specific genre: ", req.params.id, typeof req.params.id);
+  const genre = await Genre.findById(req.params.id);
   if (!genre) return res.status(404).send("Genre not found.");
   res.send(genre);
 });
