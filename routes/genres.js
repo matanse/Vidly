@@ -29,7 +29,7 @@ const getGenres = async () => {
 // Get all genres
 router.get("/", async (req, res) => {
   netRequest("Call for genres");
-  const genres = await getGenres();
+  const genres = await Genre.find();
   netReply(genres);
   res.send(genres);
 });
@@ -37,7 +37,7 @@ router.get("/", async (req, res) => {
 // Get specific genre
 router.get("/:id", (req, res) => {
   netRequest("Call for specific genre");
-  const genre = genres.find((g) => g.id === parseInt(req.params.id));
+  const genre = Genre.findById(req.params.id);
   if (!genre) return res.status(404).send("Genre not found.");
   res.send(genre);
 });
