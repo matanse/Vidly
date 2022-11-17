@@ -22,10 +22,6 @@ const genreSchema = new mongoose.Schema({
 
 const Genre = mongoose.model("Genre", genreSchema);
 
-const getGenres = async () => {
-  return await Genre.find();
-};
-
 // Get all genres
 router.get("/", async (req, res) => {
   netRequest("Call for genres");
@@ -40,7 +36,6 @@ router.get("/:id", async (req, res) => {
   const genre = await Genre.findById(req.params.id);
   netReply(genre);
   if (!genre) return res.status(404).send("Genre not found.");
-  netReply(genre);
   res.send(genre);
 });
 
