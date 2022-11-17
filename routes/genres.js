@@ -40,15 +40,14 @@ router.get("/:id", async (req, res) => {
 });
 
 // Add new genre
-router.post("/", (req, res) => {
-  netRequest("Call to create a new genre");
+router.post("/", async (req, res) => {
+  netRequest("Call to create a new genre", req.body);
   const { error } = genreValidate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   const genre = {
-    id: genres.length + 1,
     name: req.body.name,
   };
-  genres.push(genre);
+  await Genre.create(genre);
   res.send(genre);
 });
 
