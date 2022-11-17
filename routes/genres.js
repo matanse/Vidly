@@ -16,7 +16,7 @@ mongoose
   });
 
 const genreSchema = new mongoose.Schema({
-  _id: String,
+  id: String,
   name: { type: String, minLength: 2, maxLength: 30, required: true },
 });
 
