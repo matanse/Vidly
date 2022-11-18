@@ -38,6 +38,7 @@ router.post("/", async (req, res) => {
     name: req.body.name,
   };
   genre = await Genre.create(genre);
+  netReply(genre);
   res.send(genre);
 });
 
