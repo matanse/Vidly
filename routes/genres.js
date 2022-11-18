@@ -5,12 +5,13 @@ const netRequest = debug("app:net:request");
 const netReply = debug("app:net:reply");
 const mongoose = require("mongoose");
 
-const genreSchema = new mongoose.Schema({
+const Genre = mongoose.model(
+  "Genre",
+  new mongoose.Schema({
   id: String,
   name: { type: String, minLength: 2, maxLength: 30, required: true },
-});
-
-const Genre = mongoose.model("Genre", genreSchema);
+  })
+);
 
 // Get all genres
 router.get("/", async (req, res) => {
