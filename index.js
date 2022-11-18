@@ -8,6 +8,17 @@ const app = express();
 const logger = require("./middleware/logger");
 const genres = require("./routes/genres");
 const home = require("./routes/home");
+const mongoose = require("mongoose");
+
+// Connect to Mongodb server
+mongoose
+  .connect("mongodb://localhost/vidly")
+  .then(() => {
+    console.log("connect to MongoDB vidly...");
+  })
+  .catch((err) => {
+    console.log("Error: ", err);
+  });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
