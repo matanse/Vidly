@@ -63,9 +63,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete genre
-router.delete("/:id", (req, res) => {
-  netRequest("Call to delete genre");
-  const genre = genres.find((g) => g.id === parseInt(req.params.id));
+  netRequest("Call to delete genre", req.params.id, typeof req.params.id);
   if (!genre) return res.status(404).send("Genre not found.");
   netReply(genre);
   res.send(genre);
