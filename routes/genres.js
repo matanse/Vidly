@@ -8,8 +8,8 @@ const mongoose = require("mongoose");
 const Genre = mongoose.model(
   "Genre",
   new mongoose.Schema({
-  id: String,
-  name: { type: String, minLength: 2, maxLength: 30, required: true },
+    id: String,
+    name: { type: String, minLength: 2, maxLength: 30, required: true },
   })
 );
 
