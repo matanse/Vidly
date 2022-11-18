@@ -15,7 +15,7 @@ const Genre = mongoose.model("Genre", genreSchema);
 // Get all genres
 router.get("/", async (req, res) => {
   netRequest("Call for genres");
-  const genres = await Genre.find();
+  const genres = await Genre.find().sort("name");
   netReply(genres);
   res.send(genres);
 });
