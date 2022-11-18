@@ -5,16 +5,6 @@ const netRequest = debug("app:net:request");
 const netReply = debug("app:net:reply");
 const mongoose = require("mongoose");
 
-// Connect to Mongodb server
-mongoose
-  .connect("mongodb://localhost/vidly")
-  .then(() => {
-    console.log("connect to MongoDB vidly...");
-  })
-  .catch((err) => {
-    console.log("Error: ", err);
-  });
-
 const genreSchema = new mongoose.Schema({
   id: String,
   name: { type: String, minLength: 2, maxLength: 30, required: true },
