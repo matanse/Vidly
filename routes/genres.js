@@ -43,10 +43,7 @@ router.post("/", async (req, res) => {
 });
 
 // Update genre
-router.put("/:id", (req, res) => {
-  netRequest("Call to update genre");
-  const genre = genres.find((g) => g.id === parseInt(req.params.id));
-  if (!genre) return res.status(404).send("Genre not found.");
+  netRequest("Call to update genre", req.params.id, typeof req.params.id);
   const { error } = genreValidate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   genre.name = req.body.name;
