@@ -58,6 +58,7 @@ router.put("/:id", async (req, res) => {
   // genre.name = req.body.name;
   // const genre = await genre.save();
   if (!genre) return res.status(404).send("Genre not found.");
+  netReply(genre);
   res.send(genre);
 });
 
@@ -66,8 +67,7 @@ router.delete("/:id", (req, res) => {
   netRequest("Call to delete genre");
   const genre = genres.find((g) => g.id === parseInt(req.params.id));
   if (!genre) return res.status(404).send("Genre not found.");
-  const index = genres.indexOf(genre);
-  genres.splice(index, 1);
+  netReply(genre);
   res.send(genre);
 });
 
