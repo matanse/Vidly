@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
   netRequest("Call to create a new genre", req.body);
   const { error } = genreValidate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-  const genre = {
+  let genre = {
     name: req.body.name,
   };
   await Genre.create(genre);
