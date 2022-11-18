@@ -43,10 +43,21 @@ router.post("/", async (req, res) => {
 });
 
 // Update genre
+router.put("/:id", async (req, res) => {
   netRequest("Call to update genre", req.params.id, typeof req.params.id);
   const { error } = genreValidate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-  genre.name = req.body.name;
+  // update and get
+  let genre = await Genre.findByIdAndUpdate(
+    req.params.id,
+    { name: req.body.name },
+    { new: true }
+  );
+  // get and update
+  // let genre = await Genre.findById(req.params.id);
+  // genre.name = req.body.name;
+  // const genre = await genre.save();
+  if (!genre) return res.status(404).send("Genre not found.");
   res.send(genre);
 });
 
