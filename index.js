@@ -7,7 +7,7 @@ const startupDebug = debug("app:startup");
 const app = express();
 const logger = require("./middleware/logger");
 const genres = require("./routes/genres");
-const users = require("./routes/users");
+const costumers = require("./routes/costumers");
 const home = require("./routes/home");
 const mongoose = require("mongoose");
 
@@ -31,7 +31,7 @@ if (app.get("env") === "development") {
 
 // routes
 app.use("/api/genres", genres);
-app.use("/api/users", users);
+app.use("/api/costumers", costumers);
 app.use("/", home);
 
 // Self made middleware
