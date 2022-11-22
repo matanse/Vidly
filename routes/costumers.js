@@ -10,7 +10,7 @@ const Costumer = mongoose.model(
   new mongoose.Schema({
     id: String,
     name: { type: String, minLength: 1, maxLength: 30, required: true },
-    isGold: { type: boolean, default: false },
+    isGold: { type: Boolean, default: false },
     phone: { type: String, min: 7, max: 20, required: true },
   })
 );
@@ -41,9 +41,7 @@ router.post("/", async (req, res) => {
   netRequest("Call to create a new costumer", req.body);
   const { error } = costumerValidate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-  let costumer = {
-    name: req.body.name,
-  };
+  let costumer = req.body;
   costumer = await Costumer.create(costumer);
   netReply(costumer);
   res.send(costumer);
@@ -55,11 +53,9 @@ router.put("/:id", async (req, res) => {
   const { error } = costumerValidate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   // update and get
-  let costumer = await Costumer.findByIdAndUpdate(
-    req.params.id,
-    { name: req.body.name },
-    { new: true }
-  );
+  let costumer = await Costumer.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  });
   // get and update
   // let costumer = await Costumer.findById(req.params.id);
   // costumer.name = req.body.name;
@@ -84,6 +80,8 @@ router.delete("/:id", async (req, res) => {
 const costumerValidate = (costumer) => {
   const schema = {
     name: Joi.string().min(3).required(),
+    phone: Joi.string().min(7).required(),
+    isGold: Joi.boolean(),
   };
   return Joi.validate(costumer, schema);
 };
