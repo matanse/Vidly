@@ -1,17 +1,8 @@
-const Joi = require("joi");
 const router = require("express").Router();
 const debug = require("debug");
 const netRequest = debug("app:net:request");
 const netReply = debug("app:net:reply");
-const mongoose = require("mongoose");
-
-const Genre = mongoose.model(
-  "Genre",
-  new mongoose.Schema({
-    id: String,
-    name: { type: String, minLength: 2, maxLength: 30, required: true },
-  })
-);
+const { Genre, validate } = require("../models/Genre");
 
 // Get all genres
 router.get("/", async (req, res) => {
@@ -33,7 +24,7 @@ router.get("/:id", async (req, res) => {
 // Add new genre
 router.post("/", async (req, res) => {
   netRequest("Call to create a new genre", req.body);
-  const { error } = genreValidate(req.body);
+  const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   let genre = {
     name: req.body.name,
@@ -46,7 +37,7 @@ router.post("/", async (req, res) => {
 // Update genre
 router.put("/:id", async (req, res) => {
   netRequest("Call to update genre", req.params.id, typeof req.params.id);
-  const { error } = genreValidate(req.body);
+  const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   // update and get
   let genre = await Genre.findByIdAndUpdate(
@@ -74,12 +65,5 @@ router.delete("/:id", async (req, res) => {
   netReply(genre);
   res.send(genre);
 });
-
-const genreValidate = (genre) => {
-  const schema = {
-    name: Joi.string().min(3).required(),
-  };
-  return Joi.validate(genre, schema);
-};
 
 module.exports = router;
