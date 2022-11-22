@@ -58,7 +58,7 @@ router.put("/:id", async (req, res) => {
   });
   // get and update
   // let costumer = await Costumer.findById(req.params.id);
-  // costumer.name = req.body.name;
+  // costumer = req.body;
   // const costumer = await costumer.save();
   if (!costumer) return res.status(404).send("costumer not found.");
   netReply(costumer);
