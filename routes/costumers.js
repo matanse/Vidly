@@ -1,19 +1,8 @@
-const Joi = require("joi");
 const router = require("express").Router();
 const debug = require("debug");
 const netRequest = debug("app:net:request");
 const netReply = debug("app:net:reply");
-const mongoose = require("mongoose");
-
-const Costumer = mongoose.model(
-  "Costumer",
-  new mongoose.Schema({
-    id: String,
-    name: { type: String, minLength: 1, maxLength: 30, required: true },
-    isGold: { type: Boolean, default: false },
-    phone: { type: String, min: 7, max: 20, required: true },
-  })
-);
+const { Costumer, validate } = require("../models/Costumer");
 
 // Get all costumers
 router.get("/", async (req, res) => {
@@ -39,7 +28,7 @@ router.get("/:id", async (req, res) => {
 // Add new costumer
 router.post("/", async (req, res) => {
   netRequest("Call to create a new costumer", req.body);
-  const { error } = costumerValidate(req.body);
+  const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   let costumer = req.body;
   costumer = await Costumer.create(costumer);
@@ -50,7 +39,7 @@ router.post("/", async (req, res) => {
 // Update costumer
 router.put("/:id", async (req, res) => {
   netRequest("Call to update costumer", req.params.id, typeof req.params.id);
-  const { error } = costumerValidate(req.body);
+  const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   // update and get
   let costumer = await Costumer.findByIdAndUpdate(req.params.id, req.body, {
@@ -76,14 +65,5 @@ router.delete("/:id", async (req, res) => {
   netReply(costumer);
   res.send(costumer);
 });
-
-const costumerValidate = (costumer) => {
-  const schema = {
-    name: Joi.string().min(3).required(),
-    phone: Joi.string().min(7).required(),
-    isGold: Joi.boolean(),
-  };
-  return Joi.validate(costumer, schema);
-};
 
 module.exports = router;
